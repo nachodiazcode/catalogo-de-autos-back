@@ -25,7 +25,7 @@ app.use(cors({ origin: "*" })); // Permitir todas las conexiones
 
 app.use(
     cors({
-      origin: ["https://catalogo-de-autos-frontend-161npyxak-nachodazs-projects.vercel.app", "http://138.197.135.225:9100"],
+      origin: "*",
       methods: "GET,POST,PUT,DELETE",
     })
   );
