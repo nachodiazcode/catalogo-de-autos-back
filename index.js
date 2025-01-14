@@ -20,6 +20,9 @@ app.use(helmet());
 app.use(compression());
 app.use(express.json());
 
+const cors = require("cors");
+app.use(cors({ origin: "*" })); // Permitir todas las conexiones
+
 // Documentación Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
