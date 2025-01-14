@@ -23,6 +23,13 @@ app.use(express.json());
 const cors = require("cors");
 app.use(cors({ origin: "*" })); // Permitir todas las conexiones
 
+app.use(
+    cors({
+      origin: ["https://catalogo-de-autos-frontend-161npyxak-nachodazs-projects.vercel.app", "http://138.197.135.225:9100"],
+      methods: "GET,POST,PUT,DELETE",
+    })
+  );
+
 // Documentación Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
