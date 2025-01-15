@@ -20,7 +20,6 @@ app.use(helmet());
 app.use(compression());
 app.use(express.json());
 
-const cors = require("cors");
 app.use(cors({ origin: "*" })); // Permitir todas las conexiones
 
 app.use(
