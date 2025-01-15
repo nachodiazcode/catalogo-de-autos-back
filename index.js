@@ -46,10 +46,7 @@ const NODE_ENV = process.env.NODE_ENV || "production";
 app.use(helmet());
 app.use(
   cors({
-    origin: [
-      "https://automotoramassat.online",
-      "https://catalogo-de-autos-frontend-7vgls4xlz-nachodazs-projects.vercel.app", // 🔥 Permitir Frontend en Vercel
-    ],
+    origin: "**",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // 🔥 Permitir cookies y autenticación si es necesario
