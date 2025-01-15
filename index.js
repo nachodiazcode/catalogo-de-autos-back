@@ -20,7 +20,7 @@ const NODE_ENV = process.env.NODE_ENV || "production";
 // 🔹 Conectar a MongoDB con reintento automático
 (async () => {
   let attempts = 0;
-  const maxAttempts = 3; // Máximo de intentos para conectar a MongoDB
+  const maxAttempts = 3;
 
   while (attempts < maxAttempts) {
     try {
@@ -37,7 +37,7 @@ const NODE_ENV = process.env.NODE_ENV || "production";
       }
 
       console.log("🔄 Reintentando conexión en 5 segundos...");
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Espera 5 segundos antes de reintentar
+      await new Promise((resolve) => setTimeout(resolve, 5000));
     }
   }
 })();
@@ -46,18 +46,19 @@ const NODE_ENV = process.env.NODE_ENV || "production";
 app.use(helmet());
 app.use(
   cors({
-    origin: ["https://automotoramassat.online"], // Solo permitir tu dominio
+    origin: [
+      "https://automotoramassat.online",
+      "https://catalogo-de-autos-frontend-7vgls4xlz-nachodazs-projects.vercel.app", // 🔥 Permitir Frontend en Vercel
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // 🔥 Permitir cookies y autenticación si es necesario
   })
 );
 app.use(morgan(NODE_ENV === "development" ? "dev" : "combined"));
 app.use(compression());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Permitir datos en formato URL
-
-// Middleware
-app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // 📄 Documentación Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -66,7 +67,6 @@ console.log(`📄 Swagger disponible en: https://automotoramassat.online/api-doc
 // 🚗 Definir Rutas API
 app.use("/api/autos", require("./routes/autoRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
-
 
 // 🔹 Ruta para la página de inicio (evita "Cannot GET /")
 app.get("/api/", (req, res) => {
