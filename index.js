@@ -67,6 +67,31 @@ console.log(`📄 Swagger disponible en: https://automotoramassat.online/api-doc
 app.use("/api/autos", require("./routes/autoRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 
+
+// 🔹 Ruta para la página de inicio (evita "Cannot GET /")
+app.get("/", (req, res) => {
+  res.send(`
+    <html>
+      <head>
+        <title>API Automotora Massat</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+          h1 { color: #2E86C1; }
+          p { color: #555; }
+          a { color: #1E8449; text-decoration: none; font-weight: bold; }
+        </style>
+      </head>
+      <body>
+        <h1>🚗 Bienvenido a la API de Automotora Massat 🚀</h1>
+        <p>Para acceder a la documentación de la API, visita:</p>
+        <p><a href="/api-docs">📄 Documentación Swagger</a></p>
+        <p>Para obtener la lista de autos disponibles, usa:</p>
+        <p><a href="/api/autos">🔍 Ver Autos</a></p>
+      </body>
+    </html>
+  `);
+});
+
 // ❌ Middleware para manejar errores globales
 app.use(errorHandler);
 
