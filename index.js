@@ -1,46 +1,42 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-const helmet = require('helmet');
-const compression = require('compression');
-const connectDB = require('./config/db');
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./config/swaggerDocs');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
+const helmet = require("helmet");
+const compression = require("compression");
+const connectDB = require("./config/db");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swaggerDocs");
 
+// 🚀 Inicializar la aplicación Express
 const app = express();
 
-// Conectar BD
+// 🔹 Conectar a la Base de Datos MongoDB Atlas
 connectDB();
 
-// Middlewares
-app.use(cors());
-app.use(morgan('dev'));
+// 🔹 Middlewares de seguridad y optimización
 app.use(helmet());
+app.use(cors({ origin: "*", methods: "GET,POST,PUT,DELETE" }));
+app.use(morgan("dev"));
 app.use(compression());
 app.use(express.json());
 
-app.use(cors({ origin: "*" })); // Permitir todas las conexiones
+// 📄 Documentación Swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+console.log(`📄 Swagger disponible en: http://${process.env.HOST || "localhost"}:${process.env.PORT || 5000}/api-docs`);
 
-app.use(
-    cors({
-      origin: "*",
-      methods: "GET,POST,PUT,DELETE",
-    })
-  );
+// 🚗 Rutas API
+app.use("/api/autos", require("./routes/autoRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
 
-// Documentación Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// ❌ Middleware para manejar errores globales
+app.use(require("./middlewares/errorHandler"));
 
-console.log(`📄 Swagger disponible en: http://localhost:${process.env.PORT || 5000}/api-docs`);
-
-// Rutas
-app.use('/api/autos', require('./routes/autoRoutes'));
-app.use('/api/users', require('./routes/userRoutes'));
-
-// Middleware de errores
-app.use(require('./middlewares/errorHandler'));
-
-// Iniciar servidor
+// 🌍 Definir Puerto y Host
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`));
+const HOST = "0.0.0.0"; // Permite accesos desde cualquier IP
+
+// 🔥 Iniciar Servidor
+app.listen(PORT, HOST, () => {
+  console.log(`🚀 Servidor corriendo en http://${process.env.HOST || "138.197.135.225"}:${PORT}`);
+});
