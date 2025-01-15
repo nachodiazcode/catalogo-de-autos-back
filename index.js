@@ -56,6 +56,9 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Permitir datos en formato URL
 
+// Middleware
+app.use(express.json());
+
 // 📄 Documentación Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 console.log(`📄 Swagger disponible en: https://automotoramassat.online/api-docs`);
