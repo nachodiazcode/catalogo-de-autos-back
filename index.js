@@ -34,9 +34,9 @@ app.use(require("./middlewares/errorHandler"));
 
 // 🌍 Definir Puerto y Host
 const PORT = process.env.PORT || 5000;
-const HOST = "0.0.0.0"; // Permite accesos desde cualquier IP
+const HOST = "localhost"; // Permite accesos desde cualquier IP
 
 // 🔥 Iniciar Servidor
 app.listen(PORT, HOST, () => {
-  console.log(`🚀 Servidor corriendo en http://${process.env.HOST || "138.197.135.225"}:${PORT}`);
+  console.log(`🚀 Servidor corriendo en http://${process.env.HOST || "localhost"}:${PORT}`);
 });
