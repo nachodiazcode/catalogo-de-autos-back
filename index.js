@@ -69,7 +69,7 @@ app.use("/api/users", require("./routes/userRoutes"));
 
 
 // 🔹 Ruta para la página de inicio (evita "Cannot GET /")
-app.get("/", (req, res) => {
+app.get("/api/", (req, res) => {
   res.send(`
     <html>
       <head>
