@@ -44,7 +44,6 @@ const NODE_ENV = process.env.NODE_ENV || "production";
 
 // 🔹 Middlewares de seguridad y optimización
 app.use(helmet());
-app.use(cors(corsOptions));
 
 const corsOptions = {
     origin: ['http://64.23.148.54:3000', 'https://automotoramassat.online'], // Permite tu frontend
@@ -52,6 +51,8 @@ const corsOptions = {
     credentials: true, // Permitir cookies si las usas
     optionsSuccessStatus: 204
 };
+
+app.use(cors(corsOptions));
 
 
 app.use(morgan(NODE_ENV === "development" ? "dev" : "combined"));
