@@ -2,17 +2,24 @@ const Auto = require('../models/Auto');
 const createError = require('http-errors');
 const logger = require('../config/logger');
 
+// Wrapper genérico para manejar solicitudes con logging y manejo de errores
 const handleRequest = (operationName, callback) => async (req, res, next) => {
     try {
         const result = await callback(req);
-        logger.info(`${req.method} ${req.originalUrl} - ${operationName} SUCCESS`, { request: req.body, response: result });
+        logger.info(`${req.method} ${req.originalUrl} - ${operationName} SUCCESS`, {
+            request: req.body,
+            response: result,
+        });
         res.json(result);
     } catch (error) {
-        logger.error(`${req.method} ${req.originalUrl} - ${operationName} ERROR: ${error.message}`, { request: req.body });
+        logger.error(`${req.method} ${req.originalUrl} - ${operationName} ERROR: ${error.message}`, {
+            request: req.body,
+        });
         next(createError(500, error.message));
     }
 };
 
+// Controladores básicos con wrapper
 const getAutos = handleRequest('GET_AUTOS', () => Auto.find());
 
 const getAutoById = handleRequest('GET_AUTO_BY_ID', async (req) => {
@@ -38,22 +45,39 @@ const deleteAuto = handleRequest('DELETE_AUTO', async (req) => {
     return { message: 'Auto eliminado correctamente' };
 });
 
-const searchByFilters = async (req, res) => {
+// Búsqueda con filtros y logging
+const searchByFilters = async (req, res, next) => {
     try {
         const { marca, region, tipoCarroceria, precio } = req.query;
-        let filter = {};
+        const filter = {};
 
-        if (marca) filter.marca = { $regex: new RegExp(marca, "i") }; // No distingue mayúsculas/minúsculas
+        // Construcción dinámica de filtros
+        if (marca) filter.marca = { $regex: new RegExp(marca, "i") };
         if (region) filter.region = { $regex: new RegExp(region, "i") };
         if (tipoCarroceria) filter.tipoCarroceria = { $regex: new RegExp(tipoCarroceria, "i") };
         if (precio) filter.precio = { $lte: parseInt(precio) };
 
+        logger.info(`GET /api/autos/buscar - SEARCH_BY_FILTERS`, { filters: filter });
+
         const autos = await Auto.find(filter);
+
+        if (autos.length === 0) {
+            logger.warn('SEARCH_BY_FILTERS - No se encontraron autos para los filtros proporcionados', { filters: filter });
+        }
+
         res.json(autos);
     } catch (error) {
-        res.status(500).json({ message: "Error al buscar autos", error: error.message });
+        logger.error('SEARCH_BY_FILTERS ERROR:', { error: error.message });
+        next(createError(500, 'Error al buscar autos'));
     }
 };
 
-
-module.exports = { searchByFilters, getAutos, getAutoById, createAuto, updateAuto, deleteAuto };
+// Exportar controladores
+module.exports = {
+    getAutos,
+    getAutoById,
+    createAuto,
+    updateAuto,
+    deleteAuto,
+    searchByFilters,
+};
