@@ -33,7 +33,7 @@ router.get('/:id', async (req, res, next) => {
         return res.status(400).json({ error: 'ID inválido' });
     }
 
-    logInfo('blue', 'GET', `GET /api/autos/${id} from ${req.ip}`);
+    logInfo('blue', 'GET', `GET /api/autos/${_id} from ${req.ip}`);
 
     try {
         const auto = await autoController.getAutoById(id);
