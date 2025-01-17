@@ -22,11 +22,25 @@ const handleRequest = (operationName, callback) => async (req, res, next) => {
 // Controladores básicos con wrapper
 const getAutos = handleRequest('GET_AUTOS', () => Auto.find());
 
-const getAutoById = handleRequest('GET_AUTO_BY_ID', async (req) => {
-    const auto = await Auto.findById(req.params.id);
-    if (!auto) throw createError(404, 'Auto no encontrado');
-    return auto;
-});
+const getAutoById = async (req, res, next) => {
+    const id = req.params.id;
+
+    // Validar formato del ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    try {
+        const auto = await Auto.findById(id);
+        if (!auto) {
+            return res.status(404).json({ error: 'Auto no encontrado' });
+        }
+        res.status(200).json(auto);
+    } catch (error) {
+        console.error('Error al obtener auto:', error);
+        next(error);
+    }
+};
 
 const createAuto = handleRequest('CREATE_AUTO', async (req) => {
     const nuevoAuto = new Auto(req.body);
