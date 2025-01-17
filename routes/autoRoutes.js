@@ -7,8 +7,6 @@ const moment = require('moment');
 
 const logInfo = (color, label, message) => console.log(chalk[color].bold(` [${label}] ${moment().format('YYYY-MM-DD HH:mm:ss')} - ${message} `));
 
-
-
 router.get('/', (req, res, next) => {
     logInfo('blue', 'GET', `GET /api/autos from ${req.ip}`);
     autoController.getAutos(req, res, next);
@@ -20,7 +18,7 @@ router.get('/buscar', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-    logInfo('blue', 'GET', `GET /api/autos/${req.params.id} from ${req.ip}`);
+    logInfo('blue', 'GET', `GET /api/autos/detalle/${req.params.id} from ${req.ip}`);
     autoController.getAutoById(req, res, next);
 });
 
