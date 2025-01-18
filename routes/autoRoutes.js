@@ -6,8 +6,9 @@ const moment = require('moment');
 const mongoose = require('mongoose');
 
 // Función para logs
-const logInfo = (color, label, message) =>
+const logInfo = (color, label, message) => {
     console.log(chalk[color].bold(` [${label}] ${moment().format('YYYY-MM-DD HH:mm:ss')} - ${message} `));
+};
 
 // Rutas
 
@@ -19,7 +20,12 @@ router.get('/', (req, res, next) => {
 
 // Buscar autos con filtros
 router.get('/buscar', (req, res, next) => {
-    logInfo('blue', 'GET', `GET /api/autos/buscar?marca=${req.query.marca}&region=${req.query.region}&tipoCarroceria=${req.query.tipoCarroceria}&precio=${req.query.precio} from ${req.ip}`);
+    const { marca, region, tipoCarroceria, precio } = req.query;
+    logInfo(
+        'blue',
+        'GET',
+        `GET /api/autos/buscar?marca=${marca}&region=${region}&tipoCarroceria=${tipoCarroceria}&precio=${precio} from ${req.ip}`
+    );
     autoController.searchByFilters(req, res, next);
 });
 
@@ -33,7 +39,7 @@ router.get('/:id', async (req, res, next) => {
         return res.status(400).json({ error: 'ID inválido' });
     }
 
-    logInfo('blue', 'GET', `GET /api/autos/${_id} from ${req.ip}`);
+    logInfo('blue', 'GET', `GET /api/autos/${id} from ${req.ip}`);
 
     try {
         const auto = await autoController.getAutoById(id);
@@ -51,21 +57,69 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Crear un nuevo auto
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
     logInfo('green', 'POST', `POST /api/autos from ${req.ip}`);
-    autoController.createAuto(req, res, next);
+    try {
+        const auto = await autoController.createAuto(req.body);
+        res.status(201).json(auto);
+    } catch (error) {
+        logInfo('red', 'POST', `Error creating auto: ${error.message}`);
+        next(error);
+    }
 });
 
 // Actualizar un auto por ID
-router.put('/:id', (req, res, next) => {
-    logInfo('yellow', 'PUT', `PUT /api/autos/${req.params.id} from ${req.ip}`);
-    autoController.updateAuto(req, res, next);
+router.put('/:id', async (req, res, next) => {
+    const id = req.params.id;
+
+    // Validar si el ID es válido
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        logInfo('red', 'PUT', `Invalid ID: ${id} from ${req.ip}`);
+        return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    logInfo('yellow', 'PUT', `PUT /api/autos/${id} from ${req.ip}`);
+
+    try {
+        const auto = await autoController.updateAuto(id, req.body);
+
+        if (!auto) {
+            logInfo('yellow', 'PUT', `Auto not found: ${id}`);
+            return res.status(404).json({ error: 'Auto no encontrado' });
+        }
+
+        res.status(200).json(auto);
+    } catch (error) {
+        logInfo('red', 'PUT', `Error updating auto: ${error.message}`);
+        next(error);
+    }
 });
 
 // Eliminar un auto por ID
-router.delete('/:id', (req, res, next) => {
-    logInfo('red', 'DELETE', `DELETE /api/autos/${req.params.id} from ${req.ip}`);
-    autoController.deleteAuto(req, res, next);
+router.delete('/:id', async (req, res, next) => {
+    const id = req.params.id;
+
+    // Validar si el ID es válido
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        logInfo('red', 'DELETE', `Invalid ID: ${id} from ${req.ip}`);
+        return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    logInfo('red', 'DELETE', `DELETE /api/autos/${id} from ${req.ip}`);
+
+    try {
+        const auto = await autoController.deleteAuto(id);
+
+        if (!auto) {
+            logInfo('yellow', 'DELETE', `Auto not found: ${id}`);
+            return res.status(404).json({ error: 'Auto no encontrado' });
+        }
+
+        res.status(200).json({ message: 'Auto eliminado con éxito' });
+    } catch (error) {
+        logInfo('red', 'DELETE', `Error deleting auto: ${error.message}`);
+        next(error);
+    }
 });
 
 module.exports = router;
