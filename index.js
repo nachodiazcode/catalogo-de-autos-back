@@ -13,9 +13,9 @@ const errorHandler = require("./middlewares/errorHandler");
 const app = express();
 
 // 🌍 Configurar variables de entorno con valores por defecto
-const PORT = process.env.PORT || 5000;
-const HOST = process.env.HOST || "0.0.0.0";
-const NODE_ENV = process.env.NODE_ENV || "production";
+const PORT = process.env.PORT || 3000; // Cambiado a 3000
+const HOST = process.env.HOST || "localhost"; // Cambiado a localhost
+const NODE_ENV = process.env.NODE_ENV || "development"; // Por defecto en desarrollo
 
 // 🔹 Conectar a MongoDB con reintento automático
 (async () => {
@@ -44,26 +44,21 @@ const NODE_ENV = process.env.NODE_ENV || "production";
 
 // 🔹 Middlewares de seguridad y optimización
 app.use(helmet());
-
-
-
 app.use(cors());
-
-
 app.use(morgan(NODE_ENV === "development" ? "dev" : "combined"));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // 📄 Documentación Swagger
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-console.log(`📄 Swagger disponible en: https://automotoramassat.online/api-docs`);
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+console.log(`📄 Swagger disponible en: http://localhost:${PORT}/api/docs`);
 
-// 🚗 Definir Rutas API
+// 🚗 Definir Rutas API con prefijo `/api/`
 app.use("/api/autos", require("./routes/autoRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 
-// 🔹 Ruta para la página de inicio (evita "Cannot GET /")
+// 🔹 Ruta para la página de inicio de la API (dentro de `/api/`)
 app.get("/api/", (req, res) => {
   res.send(`
     <html>
@@ -79,7 +74,7 @@ app.get("/api/", (req, res) => {
       <body>
         <h1>🚗 Bienvenido a la API de Automotora Massat 🚀</h1>
         <p>Para acceder a la documentación de la API, visita:</p>
-        <p><a href="/api-docs">📄 Documentación Swagger</a></p>
+        <p><a href="/api/docs">📄 Documentación Swagger</a></p>
         <p>Para obtener la lista de autos disponibles, usa:</p>
         <p><a href="/api/autos">🔍 Ver Autos</a></p>
       </body>
@@ -103,7 +98,7 @@ process.on("unhandledRejection", (reason, promise) => {
 
 // 🔥 Iniciar Servidor
 const server = app.listen(PORT, HOST, () => {
-  console.log(`🚀 Servidor corriendo en https://automotoramassat.online 🚗`);
+  console.log(`🚀 Servidor corriendo en http://${HOST}:${PORT}/api/ 🚗`);
 });
 
 // 🛑 Manejo del cierre de la aplicación
