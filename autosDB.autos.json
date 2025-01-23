@@ -1,0 +1,170 @@
+[{
+  "_id": {
+    "$oid": "67808878f09034e6067385b3"
+  },
+  "marca": "Toyota",
+  "region": "Santiago",
+  "tipoCarroceria": "SUV",
+  "precio": 5000,
+  "imagen": "https://automotoramassat.online/uploads-image/toyota-yaris-cross_modelo.avif"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385b4"
+  },
+  "marca": "Chevrolet",
+  "region": "Valparaíso",
+  "tipoCarroceria": "Sedán",
+  "precio": 18000,
+  "imagen": "https://automotoramassat.online/uploads-image/102021-GROOVEL.jpg"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385b5"
+  },
+  "marca": "Ford",
+  "region": "Concepción",
+  "tipoCarroceria": "Pickup",
+  "precio": 25000,
+  "imagen": "https://automotoramassat.online/uploads-image/ford.webp"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385b6"
+  },
+  "marca": "Hyundai",
+  "region": "Antofagasta",
+  "tipoCarroceria": "Hatchback",
+  "precio": 15000,
+  "imagen": "https://automotoramassat.online/uploads-image/hyundai-creta-1_1919x1278.jpg"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385b7"
+  },
+  "marca": "Kia",
+  "region": "Santiago",
+  "tipoCarroceria": "SUV",
+  "precio": 22000,
+  "imagen": "https://automotoramassat.online/uploads-image/portada-kia-seltos-w-.webp"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385b8"
+  },
+  "marca": "Nissan",
+  "region": "Valparaíso",
+  "tipoCarroceria": "Sedán",
+  "precio": 19000,
+  "imagen": "https://automotoramassat.online/uploads-image/155a16b4-6144-49e7-b0b3-3c33b19289f7.jpg"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385b9"
+  },
+  "marca": "Mazda",
+  "region": "Concepción",
+  "tipoCarroceria": "Pickup",
+  "precio": 27000,
+  "imagen": "https://automotoramassat.online/uploads-image/images.jpeg"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385ba"
+  },
+  "marca": "Honda",
+  "region": "Antofagasta",
+  "tipoCarroceria": "Hatchback",
+  "precio": 14000,
+  "imagen": "https://automotoramassat.online/uploads-image/HON027_principal.jpg"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385bb"
+  },
+  "marca": "Subaru",
+  "region": "Santiago",
+  "tipoCarroceria": "SUV",
+  "precio": 23000,
+  "imagen": "https://automotoramassat.online/uploads-image/IMPREZA_XS-FRONT-Rojo.avif"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385bc"
+  },
+  "marca": "Volkswagen",
+  "region": "Valparaíso",
+  "tipoCarroceria": "Sedán",
+  "precio": 20000,
+  "imagen": "https://automotoramassat.online/uploads-image/vw-ngw6-showroom-atlas-design-imagery-exterior-1-overview-copia.png"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385bd"
+  },
+  "marca": "BMW",
+  "region": "Concepción",
+  "tipoCarroceria": "Coupé",
+  "precio": 35000,
+  "imagen": "https://automotoramassat.online/uploads-image/P90437481_highRes_the-first-ever-bmw-i.webp"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385be"
+  },
+  "marca": "Mercedes-Benz",
+  "region": "Antofagasta",
+  "tipoCarroceria": "Convertible",
+  "precio": 40000,
+  "imagen": "https://automotoramassat.online/uploads-image/01%20Mercedes-Benz%20GLS%202021.jpg"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385bf"
+  },
+  "marca": "Audi",
+  "region": "Santiago",
+  "tipoCarroceria": "SUV",
+  "precio": 33000,
+  "imagen": "https://automotoramassat.online/uploads-image/foto1.jpg"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385c0"
+  },
+  "marca": "Renault",
+  "region": "Valparaíso",
+  "tipoCarroceria": "Hatchback",
+  "precio": 12000,
+  "imagen": "https://automotoramassat.online/uploads-image/1709853182-ymWAHm80h9.webp"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385c1"
+  },
+  "marca": "Peugeot",
+  "region": "Concepción",
+  "tipoCarroceria": "Sedán",
+  "precio": 16000,
+  "imagen": "https://automotoramassat.online/uploads-image/portada-kia-seltos-w-.webp"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385c2"
+  },
+  "marca": "Fiat",
+  "region": "Antofagasta",
+  "tipoCarroceria": "Compacto",
+  "precio": 11000,
+  "imagen": "https://automotoramassat.online/uploads-image/20240616-FIAT-FASTBACK-LIMITED-COLOMBIA-PRECIO-DATOS-07.webp"
+},
+{
+  "_id": {
+    "$oid": "67808878f09034e6067385c3"
+  },
+  "marca": "Tesla",
+  "region": "Santiago",
+  "tipoCarroceria": "Eléctrico",
+  "precio": 50000,
+  "imagen": "https://automotoramassat.online/uploads-image/tesla-model-x.webp"
+}]

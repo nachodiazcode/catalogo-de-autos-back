@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const AutoSchema = new mongoose.Schema({
-    marca: { type: String, required: true },
-    region: { type: String, required: true },
-    tipoCarroceria: { type: String, required: true },
-    precio: { type: Number, required: true },
-    imagen: { type: String, default: null } // URL de la imagen
-}, { timestamps: true });
+    marca: { type: String, },
+    region: { type: String, },
+    tipoCarroceria: { type: String, },
+    precio: { type: Number, },
+    imagen: { type: String, default: null },
+});
+
 
 module.exports = mongoose.model('Auto', AutoSchema);

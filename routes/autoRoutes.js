@@ -4,11 +4,16 @@ const autoController = require('../controllers/autoController');
 const chalk = require('chalk');
 const moment = require('moment');
 const mongoose = require('mongoose');
+const Auto = require('../models/Auto');
 
 // Función para logs
 const logInfo = (color, label, message) => {
     console.log(chalk[color].bold(` [${label}] ${moment().format('YYYY-MM-DD HH:mm:ss')} - ${message} `));
 };
+
+// Middleware para procesar `req.body`
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 // Rutas
 
@@ -30,29 +35,24 @@ router.get('/buscar', (req, res, next) => {
 });
 
 // Obtener detalle de un auto por ID
-router.get('/:id', async (req, res, next) => {
+router.get('/detalle/:id', async (req, res) => {
     const id = req.params.id;
 
-    // Validar si el ID es válido
+    // Validar formato del ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        logInfo('red', 'GET', `Invalid ID: ${id} from ${req.ip}`);
         return res.status(400).json({ error: 'ID inválido' });
     }
 
-    logInfo('blue', 'GET', `GET /api/autos/${id} from ${req.ip}`);
-
     try {
-        const auto = await autoController.getAutoById(id);
-
+        const auto = await Auto.findById(id);
         if (!auto) {
-            logInfo('yellow', 'GET', `Auto not found: ${id}`);
             return res.status(404).json({ error: 'Auto no encontrado' });
         }
 
         res.status(200).json(auto);
     } catch (error) {
-        logInfo('red', 'GET', `Error fetching auto by ID: ${error.message}`);
-        next(error);
+        console.error('Error al obtener auto por ID:', error.message);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 
@@ -60,10 +60,40 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     logInfo('green', 'POST', `POST /api/autos from ${req.ip}`);
     try {
-        const auto = await autoController.createAuto(req.body);
-        res.status(201).json(auto);
+        // Validar que el cuerpo no esté vacío
+        if (!req.body || Object.keys(req.body).length === 0) {
+            logInfo('red', 'POST', 'El cuerpo de la solicitud está vacío');
+            return res.status(400).json({ error: 'El cuerpo de la solicitud está vacío' });
+        }
+
+        const { marca, region, tipoCarroceria, precio, imagen } = req.body;
+
+        // Validar campos requeridos
+        if (!marca || !region || !tipoCarroceria || !precio) {
+            logInfo(
+                'red',
+                'POST',
+                'Faltan campos requeridos: marca, region, tipoCarroceria, precio son obligatorios'
+            );
+            return res.status(400).json({
+                error: 'Los campos marca, region, tipoCarroceria y precio son obligatorios',
+            });
+        }
+
+        // Crear el nuevo auto
+        const nuevoAuto = new Auto({
+            marca,
+            region,
+            tipoCarroceria,
+            precio,
+            imagen: imagen || null, // Campo opcional con valor predeterminado
+        });
+
+        const autoCreado = await nuevoAuto.save();
+        logInfo('green', 'POST', `Auto creado con éxito: ${JSON.stringify(autoCreado)}`);
+        res.status(201).json(autoCreado);
     } catch (error) {
-        logInfo('red', 'POST', `Error creating auto: ${error.message}`);
+        logInfo('red', 'POST', `Error al crear el auto: ${error.message}`);
         next(error);
     }
 });
@@ -81,7 +111,7 @@ router.put('/:id', async (req, res, next) => {
     logInfo('yellow', 'PUT', `PUT /api/autos/${id} from ${req.ip}`);
 
     try {
-        const auto = await autoController.updateAuto(id, req.body);
+        const auto = await Auto.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
 
         if (!auto) {
             logInfo('yellow', 'PUT', `Auto not found: ${id}`);
@@ -108,7 +138,7 @@ router.delete('/:id', async (req, res, next) => {
     logInfo('red', 'DELETE', `DELETE /api/autos/${id} from ${req.ip}`);
 
     try {
-        const auto = await autoController.deleteAuto(id);
+        const auto = await Auto.findByIdAndDelete(id);
 
         if (!auto) {
             logInfo('yellow', 'DELETE', `Auto not found: ${id}`);
